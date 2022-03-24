@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_netflix_responsive_ui/models/models.dart';
+import 'package:popcorn_mobile_app/models/models.dart';
 
 class Trendings extends StatelessWidget {
   final String title;

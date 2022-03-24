@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_netflix_responsive_ui/assets.dart';
+import 'package:popcorn_mobile_app/assets.dart';
 
 class CustomAppBar extends StatelessWidget {
   final double scrollOffset;
@@ -24,7 +24,7 @@ class CustomAppBar extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: [
-            Image.asset(Assets.netflixLogo0),
+            Image.asset(Assets.logo_popcorn),
             const SizedBox(width: 12.0),
             Expanded(
               child: Row(
