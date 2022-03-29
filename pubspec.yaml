@@ -1,4 +1,4 @@
-name: flutter_netflix_responsive_ui
+name: popcorn_mobile_app
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -28,6 +28,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.4
   flutter_bloc: ^8.0.1
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

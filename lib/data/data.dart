@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_netflix_responsive_ui/assets.dart';
-import 'package:flutter_netflix_responsive_ui/models/models.dart';
+import 'package:popcorn_mobile_app/assets.dart';
+import 'package:popcorn_mobile_app/models/models.dart';
 
 final Movie sintelMovie = Movie(
   name: 'Sintel',
