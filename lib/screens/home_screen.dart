@@ -1,8 +1,45 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:popcorn_mobile_app/cubits/cubits.dart';
 import 'package:popcorn_mobile_app/data/data.dart';
 import 'package:popcorn_mobile_app/widgets/widgets.dart';
+import '../models/models.dart';
+
+List<Movie> parseMovies(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  return parsed.map<Movie>((json) => Movie.fromMap(json)).toList();
+}
+
+Future<List<Movie>> fetchMovie() async {
+  final response = await http.get(
+    Uri.parse('http://popcorn.mocklab.io/originals'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+    },
+  );
+  print(response.body.toString());
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    // return Movie.fromJson(jsonDecode(response.body));
+    return parseMovies(response.body);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load movies');
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,6 +50,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late ScrollController _scrollController;
+  late Future<Movie> futureMovie;
+  late Future<List<Movie>> originalMovies;
 
   @override
   void initState() {
@@ -20,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ..addListener(() {
         context.read<AppBarCubit>().setOffset(_scrollController.offset);
       });
+    originalMovies = fetchMovie();
     super.initState();
   }
 
@@ -66,11 +106,57 @@ class _HomeScreenState extends State<HomeScreen> {
               contentList: myList,
             ),
           ),
+          // SliverToBoxAdapter(
+          //   child: FutureBuilder<Movie>(
+          //     future: futureMovie,
+          //     builder: (context, snapshot) {
+          //       if (snapshot.hasData) {
+          //         return Text(
+          //           snapshot.data!.name!,
+          //           style: const TextStyle(
+          //             color: Colors.white,
+          //             fontSize: 20.0,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         );
+          //       } else if (snapshot.hasError) {
+          //         return Text(
+          //           '${snapshot.error}',
+          //           style: const TextStyle(
+          //             color: Colors.white,
+          //             fontSize: 20.0,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         );
+          //       }
+          //       // By default, show a loading spinner.
+          //       return const CircularProgressIndicator();
+          //     },
+          //   ),
+          // ),
           SliverToBoxAdapter(
-            child: ContentList(
-              key: PageStorageKey('originals'),
-              title: 'Netflix Originals',
-              contentList: originals,
+            child: FutureBuilder<List<Movie>>(
+              future: originalMovies,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ContentList(
+                    key: PageStorageKey('originals'),
+                    title: 'Popcorn Originals',
+                    contentList: snapshot.data!,
+                  );
+                } else if (snapshot.hasError) {
+                  return Text(
+                    '${snapshot.error}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
             ),
           ),
           SliverPadding(

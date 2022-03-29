@@ -50,7 +50,7 @@ class Trendings extends StatelessWidget {
                       width: 100.0,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(content.imageUrl),
+                          image: AssetImage(content.imageUrl!),
                           fit: BoxFit.cover,
                         ),
                         shape: BoxShape.circle,
@@ -81,7 +81,7 @@ class Trendings extends StatelessWidget {
                       bottom: 0,
                       child: SizedBox(
                         height: 40.0,
-                        child: Image.asset(content.titleImageUrl),
+                        child: Image.asset(content.titleImageUrl!),
                       ),
                     ),
                   ],
