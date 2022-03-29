@@ -1,5 +1,3 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +7,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:popcorn_mobile_app/cubits/cubits.dart';
 import 'package:popcorn_mobile_app/data/data.dart';
+import 'package:popcorn_mobile_app/screens/screens.dart';
+import 'package:popcorn_mobile_app/services/services.dart';
 import 'package:popcorn_mobile_app/widgets/widgets.dart';
 import '../models/models.dart';
 
@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late ScrollController _scrollController;
   late Future<Movie> futureMovie;
   late Future<List<Movie>> originalMovies;
+  late Future<List<Movie>> trendingMovies;
 
   @override
   void initState() {
@@ -60,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         context.read<AppBarCubit>().setOffset(_scrollController.offset);
       });
     originalMovies = fetchMovie();
+    // trendingMovies = AllMoviesService.fetchMovie("trendings");
     super.initState();
   }
 
@@ -92,48 +94,56 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverPadding(
             padding: const EdgeInsets.only(top: 15.0),
             sliver: SliverToBoxAdapter(
-              child: Trendings(
-                key: PageStorageKey('trendings'),
-                title: 'Trendings',
-                contentList: trendings,
+              child: FutureBuilder<List<Movie>>(
+                future: originalMovies,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ContentList(
+                      key: PageStorageKey('trendings'),
+                      title: 'Trendings',
+                      contentList: snapshot.data!,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text(
+                      '${snapshot.error}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  }
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
               ),
             ),
           ),
           SliverToBoxAdapter(
-            child: ContentList(
-              key: PageStorageKey('myFavourites'),
-              title: 'My Favourites',
-              contentList: myList,
+            child: FutureBuilder<List<Movie>>(
+              future: originalMovies,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ContentList(
+                    key: PageStorageKey('myFavourites'),
+                    title: 'My Favourites',
+                    contentList: snapshot.data!,
+                  );
+                } else if (snapshot.hasError) {
+                  return Text(
+                    '${snapshot.error}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: FutureBuilder<Movie>(
-          //     future: futureMovie,
-          //     builder: (context, snapshot) {
-          //       if (snapshot.hasData) {
-          //         return Text(
-          //           snapshot.data!.name!,
-          //           style: const TextStyle(
-          //             color: Colors.white,
-          //             fontSize: 20.0,
-          //             fontWeight: FontWeight.bold,
-          //           ),
-          //         );
-          //       } else if (snapshot.hasError) {
-          //         return Text(
-          //           '${snapshot.error}',
-          //           style: const TextStyle(
-          //             color: Colors.white,
-          //             fontSize: 20.0,
-          //             fontWeight: FontWeight.bold,
-          //           ),
-          //         );
-          //       }
-          //       // By default, show a loading spinner.
-          //       return const CircularProgressIndicator();
-          //     },
-          //   ),
-          // ),
           SliverToBoxAdapter(
             child: FutureBuilder<List<Movie>>(
               future: originalMovies,
@@ -162,10 +172,28 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverPadding(
             padding: const EdgeInsets.only(bottom: 20.0),
             sliver: SliverToBoxAdapter(
-              child: ContentList(
-                key: PageStorageKey('trending'),
-                title: 'Trending',
-                contentList: trending,
+              child: FutureBuilder<List<Movie>>(
+                future: originalMovies,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ContentList(
+                      key: PageStorageKey('trending'),
+                      title: 'Trending',
+                      contentList: snapshot.data!,
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text(
+                      '${snapshot.error}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  }
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
               ),
             ),
           )
