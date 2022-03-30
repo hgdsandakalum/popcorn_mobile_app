@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:popcorn_mobile_app/cubits/cubits.dart';
 import 'package:popcorn_mobile_app/data/data.dart';
@@ -11,6 +13,8 @@ import 'package:popcorn_mobile_app/screens/screens.dart';
 import 'package:popcorn_mobile_app/services/services.dart';
 import 'package:popcorn_mobile_app/widgets/widgets.dart';
 import '../models/models.dart';
+
+FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 List<Movie> parseMovies(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
@@ -28,7 +32,7 @@ Future<List<Movie>> fetchMovie() async {
       'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
     },
   );
-  print(response.body.toString());
+  // print(response.body.toString());
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -39,6 +43,18 @@ Future<List<Movie>> fetchMovie() async {
     // then throw an exception.
     throw Exception('Failed to load movies');
   }
+}
+
+Future<List<Movie>> fetchAllMovies() async {
+  QuerySnapshot<Map<String, dynamic>> popcornOriginals =
+      await FirebaseFirestore.instance.collection('popcorn_originals').get();
+
+  return parseAllMovies(popcornOriginals);
+}
+
+List<Movie> parseAllMovies(QuerySnapshot<Map<String, dynamic>> snapshot) {
+  print(snapshot.docs);
+  return snapshot.docs.map((e) => Movie.fromMap(e.data())).toList();
 }
 
 class HomeScreen extends StatefulWidget {
@@ -61,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         context.read<AppBarCubit>().setOffset(_scrollController.offset);
       });
     originalMovies = fetchMovie();
-    // trendingMovies = AllMoviesService.fetchMovie("trendings");
+    trendingMovies = fetchAllMovies();
     super.initState();
   }
 
@@ -121,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SliverToBoxAdapter(
             child: FutureBuilder<List<Movie>>(
-              future: originalMovies,
+              future: trendingMovies,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ContentList(
@@ -169,11 +185,47 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+          // SliverToBoxAdapter(
+          //   child: FutureBuilder<QuerySnapshot>(
+          //       future: popcornOriginals.get(),
+          //       builder: (BuildContext context,
+          //           AsyncSnapshot<QuerySnapshot> snapshot) {
+          //         if (snapshot.hasError) {
+          //           return Text(
+          //             "Something went wrong",
+          //             style: const TextStyle(
+          //               color: Colors.white,
+          //               fontSize: 16.0,
+          //             ),
+          //           );
+          //         }
+
+          //         if (!snapshot.hasData) {
+          //           return Text(
+          //             "Data does not exist",
+          //             style: const TextStyle(
+          //               color: Colors.white,
+          //               fontSize: 16.0,
+          //             ),
+          //           );
+          //         }
+
+          //         if (snapshot.connectionState == ConnectionState.done) {
+          //           return ContentList(
+          //             key: PageStorageKey('test'),
+          //             title: 'Test',
+          //             contentList: snapshot.data!.docs,
+          //           );
+          //         }
+
+          //         return Text("loading");
+          //       }),
+          // ),
           SliverPadding(
             padding: const EdgeInsets.only(bottom: 20.0),
             sliver: SliverToBoxAdapter(
               child: FutureBuilder<List<Movie>>(
-                future: originalMovies,
+                future: trendingMovies,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ContentList(
@@ -200,5 +252,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  getExpenseItems(AsyncSnapshot<QuerySnapshot> snapshot) {
+    return snapshot.data!.docs
+        .map((doc) => new ListTile(
+            title: new Text(doc["name"]), subtitle: new Text(doc["name"])))
+        .toList();
   }
 }
