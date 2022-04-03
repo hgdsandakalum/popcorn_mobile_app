@@ -16,46 +16,34 @@ import '../models/models.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-List<Movie> parseMovies(String responseBody) {
-  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-  return parsed.map<Movie>((json) => Movie.fromMap(json)).toList();
-}
+// List<Movie> parseMovies(String responseBody) {
+//   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+//   return parsed.map<Movie>((json) => Movie.fromMap(json)).toList();
+// }
 
-Future<List<Movie>> fetchMovie() async {
-  final response = await http.get(
-    Uri.parse('http://popcorn.mocklab.io/originals'),
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
-    },
-  );
-  // print(response.body.toString());
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    // return Movie.fromJson(jsonDecode(response.body));
-    return parseMovies(response.body);
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load movies');
-  }
-}
-
-Future<List<Movie>> fetchAllMovies() async {
-  QuerySnapshot<Map<String, dynamic>> popcornOriginals =
-      await FirebaseFirestore.instance.collection('popcorn_originals').get();
-
-  return parseAllMovies(popcornOriginals);
-}
-
-List<Movie> parseAllMovies(QuerySnapshot<Map<String, dynamic>> snapshot) {
-  print(snapshot.docs);
-  return snapshot.docs.map((e) => Movie.fromMap(e.data())).toList();
-}
+// Future<List<Movie>> fetchMovie() async {
+//   final response = await http.get(
+//     Uri.parse('http://popcorn.mocklab.io/originals'),
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Access-Control-Allow-Origin': '*',
+//       'Access-Control-Allow-Credentials': 'true',
+//       'Access-Control-Allow-Headers': 'Content-Type',
+//       'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+//     },
+//   );
+//   print(response.body.toString());
+//   if (response.statusCode == 200) {
+//     // If the server did return a 200 OK response,
+//     // then parse the JSON.
+//     // return Movie.fromJson(jsonDecode(response.body));
+//     return parseMovies(response.body);
+//   } else {
+//     // If the server did not return a 200 OK response,
+//     // then throw an exception.
+//     throw Exception('Failed to load movies');
+//   }
+// }
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -69,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<Movie> futureMovie;
   late Future<List<Movie>> originalMovies;
   late Future<List<Movie>> trendingMovies;
+  late Future<List<Movie>> topRatedMovies;
 
   @override
   void initState() {
@@ -76,8 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ..addListener(() {
         context.read<AppBarCubit>().setOffset(_scrollController.offset);
       });
-    originalMovies = fetchMovie();
-    trendingMovies = fetchAllMovies();
+    originalMovies = AllMoviesService.fetchOriginals();
+    trendingMovies = AllMoviesService.fetchTrendings();
+    topRatedMovies = AllMoviesService.fetchTopRated();
     super.initState();
   }
 
@@ -111,12 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(top: 15.0),
             sliver: SliverToBoxAdapter(
               child: FutureBuilder<List<Movie>>(
-                future: originalMovies,
+                future: trendingMovies,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ContentList(
                       key: PageStorageKey('trendings'),
-                      title: 'Trendings',
+                      title: 'Trendings Now',
                       contentList: snapshot.data!,
                     );
                   } else if (snapshot.hasError) {
@@ -130,7 +120,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
                   // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 10.0),
+                      child: SizedBox(
+                          width: 30.0,
+                          height: 30.0,
+                          child: const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                          )),
+                    ),
+                  );
                 },
               ),
             ),
@@ -156,7 +157,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 // By default, show a loading spinner.
-                return const CircularProgressIndicator();
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50.0, vertical: 10.0),
+                    child: SizedBox(
+                        width: 30.0,
+                        height: 30.0,
+                        child: const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                        )),
+                  ),
+                );
               },
             ),
           ),
@@ -181,56 +193,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 // By default, show a loading spinner.
-                return const CircularProgressIndicator();
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50.0, vertical: 10.0),
+                    child: SizedBox(
+                        width: 30.0,
+                        height: 30.0,
+                        child: const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                        )),
+                  ),
+                );
               },
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: FutureBuilder<QuerySnapshot>(
-          //       future: popcornOriginals.get(),
-          //       builder: (BuildContext context,
-          //           AsyncSnapshot<QuerySnapshot> snapshot) {
-          //         if (snapshot.hasError) {
-          //           return Text(
-          //             "Something went wrong",
-          //             style: const TextStyle(
-          //               color: Colors.white,
-          //               fontSize: 16.0,
-          //             ),
-          //           );
-          //         }
-
-          //         if (!snapshot.hasData) {
-          //           return Text(
-          //             "Data does not exist",
-          //             style: const TextStyle(
-          //               color: Colors.white,
-          //               fontSize: 16.0,
-          //             ),
-          //           );
-          //         }
-
-          //         if (snapshot.connectionState == ConnectionState.done) {
-          //           return ContentList(
-          //             key: PageStorageKey('test'),
-          //             title: 'Test',
-          //             contentList: snapshot.data!.docs,
-          //           );
-          //         }
-
-          //         return Text("loading");
-          //       }),
-          // ),
           SliverPadding(
             padding: const EdgeInsets.only(bottom: 20.0),
             sliver: SliverToBoxAdapter(
               child: FutureBuilder<List<Movie>>(
-                future: trendingMovies,
+                future: topRatedMovies,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ContentList(
-                      key: PageStorageKey('trending'),
-                      title: 'Trending',
+                      key: PageStorageKey('topRated'),
+                      title: 'Top Rated',
                       contentList: snapshot.data!,
                     );
                   } else if (snapshot.hasError) {
@@ -244,7 +231,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
                   // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 10.0),
+                      child: SizedBox(
+                          width: 30.0,
+                          height: 30.0,
+                          child: const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                          )),
+                    ),
+                  );
                 },
               ),
             ),
@@ -252,12 +250,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-  }
-
-  getExpenseItems(AsyncSnapshot<QuerySnapshot> snapshot) {
-    return snapshot.data!.docs
-        .map((doc) => new ListTile(
-            title: new Text(doc["name"]), subtitle: new Text(doc["name"])))
-        .toList();
   }
 }
