@@ -23,22 +23,22 @@ class CustomAppBar extends StatelessWidget {
         child: Row(
           children: [
             Image.asset(Assets.logo_popcorn),
-            const SizedBox(width: 12.0),
+            const SizedBox(width: 16.0),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _MainAppBarButton(
-                    title: 'TV Shows',
-                    onTap: () => print('TV Shows'),
-                  ),
-                  _MainAppBarButton(
                     title: 'Movies',
                     onTap: () => print('Movies'),
                   ),
                   _MainAppBarButton(
-                    title: 'My List',
-                    onTap: () => print('My List'),
+                    title: 'My Favourites',
+                    onTap: () => print('My Favourites'),
+                  ),
+                  _MainAppBarButton(
+                    title: 'My Lists',
+                    onTap: () => print('My Lists'),
                   ),
                 ],
               ),
