@@ -54,7 +54,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late ScrollController _scrollController;
-  late Future<Movie> futureMovie;
+  late Movie featureMovie;
   late Future<List<Movie>> originalMovies;
   late Future<List<Movie>> trendingMovies;
   late Future<List<Movie>> topRatedMovies;
@@ -68,6 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
     originalMovies = AllMoviesService.fetchOriginals();
     trendingMovies = AllMoviesService.fetchTrendings();
     topRatedMovies = AllMoviesService.fetchTopRated();
+    // AllMoviesService.fetchFeatured().then((result) {
+    //   print(result);
+    //   setState(() {
+    //     featureMovie = result;
+    //   });
+    // });
+
     super.initState();
   }
 
@@ -95,7 +102,37 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: _scrollController,
         slivers: [
           SliverToBoxAdapter(
-            child: MovieHeader(featuredContent: sintelMovie),
+            child: FutureBuilder<DocumentSnapshot>(
+                future: AllMoviesService.fetchFeatured(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Something went wrong");
+                  }
+
+                  if (snapshot.hasData && !snapshot.data!.exists) {
+                    return Text("Document does not exist");
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    return MovieHeader(featuredContent: data);
+                  }
+
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 10.0),
+                      child: SizedBox(
+                          width: 30.0,
+                          height: 30.0,
+                          child: const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                          )),
+                    ),
+                  );
+                }),
           ),
           SliverPadding(
             padding: const EdgeInsets.only(top: 15.0),
