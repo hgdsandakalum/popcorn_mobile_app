@@ -15,7 +15,7 @@ class _NavScreenState extends State<NavScreen> {
     Scaffold(),
     Scaffold(),
     Scaffold(),
-    Scaffold(),
+    MovieDetails(key: PageStorageKey('movieDetails')),
   ];
 
   final Map<String, IconData> _icons = const {
@@ -36,24 +36,24 @@ class _NavScreenState extends State<NavScreen> {
         child: _screens[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.black,
-              items: _icons
-                  .map((title, icon) => MapEntry(
-                      title,
-                      BottomNavigationBarItem(
-                        icon: Icon(icon, size: 30.0),
-                        label: title,
-                      )))
-                  .values
-                  .toList(),
-              currentIndex: _currentIndex,
-              selectedItemColor: Colors.white,
-              selectedFontSize: 11.0,
-              unselectedItemColor: Colors.grey,
-              unselectedFontSize: 11.0,
-              onTap: (index) => setState(() => _currentIndex = index),
-            ),
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.black,
+        items: _icons
+            .map((title, icon) => MapEntry(
+                title,
+                BottomNavigationBarItem(
+                  icon: Icon(icon, size: 30.0),
+                  label: title,
+                )))
+            .values
+            .toList(),
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.white,
+        selectedFontSize: 11.0,
+        unselectedItemColor: Colors.grey,
+        unselectedFontSize: 11.0,
+        onTap: (index) => setState(() => _currentIndex = index),
+      ),
     );
   }
 }
