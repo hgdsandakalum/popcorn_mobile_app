@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:popcorn_mobile_app/models/models.dart';
 
+import '../screens/screens.dart';
+
 class ContentList extends StatelessWidget {
   final String title;
   final List<Movie> contentList;
@@ -76,7 +78,8 @@ class ContentList extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final Movie content = contentList[index];
                   return GestureDetector(
-                    onTap: () => print(content.name),
+                    //onTap: () => print(content.name),
+                    onTap: () => MovieDetails(),
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 10.0),
                       height: 200.0,
