@@ -13,7 +13,7 @@ class _NavScreenState extends State<NavScreen> {
   final List<Widget> _screens = [
     HomeScreen(key: PageStorageKey('homeScreen')),
     MyFavourites(key: PageStorageKey('favouritesScreen')),
-    Scaffold(),
+    ComingSoon(key: PageStorageKey('comingSoonScreen')),
     Scaffold(),
     MovieDetails(key: PageStorageKey('movieDetails')),
   ];
@@ -21,7 +21,7 @@ class _NavScreenState extends State<NavScreen> {
   final Map<String, IconData> _icons = const {
     'Home': Icons.home,
     'Favourites': Icons.favorite,
-    'Coming Soon': Icons.queue_play_next,
+    'Upcoming': Icons.queue_play_next,
     'Downloads': Icons.file_download,
     'More': Icons.menu,
   };
