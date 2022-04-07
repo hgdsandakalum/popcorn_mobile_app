@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:popcorn_mobile_app/models/models.dart';
+import 'package:popcorn_mobile_app/screens/screens.dart';
 import 'package:popcorn_mobile_app/widgets/widgets.dart';
 
 class MovieHeader extends StatelessWidget {
@@ -52,7 +53,13 @@ class MovieHeader extends StatelessWidget {
             children: [
               VerticalIconButton(
                 icon: Icons.favorite_outline,
-                onTap: () => print('My Favourites'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MyFavourites()),
+                  );
+                },
               ),
               _PlayButton(),
               VerticalIconButton(

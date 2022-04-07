@@ -12,7 +12,7 @@ class NavScreen extends StatefulWidget {
 class _NavScreenState extends State<NavScreen> {
   final List<Widget> _screens = [
     HomeScreen(key: PageStorageKey('homeScreen')),
-    Scaffold(),
+    MyFavourites(key: PageStorageKey('favouritesScreen')),
     Scaffold(),
     Scaffold(),
     Scaffold(),
@@ -20,7 +20,7 @@ class _NavScreenState extends State<NavScreen> {
 
   final Map<String, IconData> _icons = const {
     'Home': Icons.home,
-    'Search': Icons.search,
+    'Favourites': Icons.favorite,
     'Coming Soon': Icons.queue_play_next,
     'Downloads': Icons.file_download,
     'More': Icons.menu,
@@ -36,24 +36,24 @@ class _NavScreenState extends State<NavScreen> {
         child: _screens[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.black,
-              items: _icons
-                  .map((title, icon) => MapEntry(
-                      title,
-                      BottomNavigationBarItem(
-                        icon: Icon(icon, size: 30.0),
-                        label: title,
-                      )))
-                  .values
-                  .toList(),
-              currentIndex: _currentIndex,
-              selectedItemColor: Colors.white,
-              selectedFontSize: 11.0,
-              unselectedItemColor: Colors.grey,
-              unselectedFontSize: 11.0,
-              onTap: (index) => setState(() => _currentIndex = index),
-            ),
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.black,
+        items: _icons
+            .map((title, icon) => MapEntry(
+                title,
+                BottomNavigationBarItem(
+                  icon: Icon(icon, size: 30.0),
+                  label: title,
+                )))
+            .values
+            .toList(),
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.white,
+        selectedFontSize: 11.0,
+        unselectedItemColor: Colors.grey,
+        unselectedFontSize: 11.0,
+        onTap: (index) => setState(() => _currentIndex = index),
+      ),
     );
   }
 }
