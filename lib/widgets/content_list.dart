@@ -83,7 +83,13 @@ class ContentList extends StatelessWidget {
                       FavouriteService.addFavourtie(content);
                     },
                     //onTap: () => print(content.name),
-                    onTap: () => MovieDetails(),
+                    onTap: () {
+                      var docId = content.name;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Detail(docId)));
+                    },
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 10.0),
                       height: 200.0,
