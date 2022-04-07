@@ -8,7 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:popcorn_mobile_app/cubits/cubits.dart';
-import 'package:popcorn_mobile_app/data/data.dart';
 import 'package:popcorn_mobile_app/screens/screens.dart';
 import 'package:popcorn_mobile_app/services/services.dart';
 import 'package:popcorn_mobile_app/widgets/widgets.dart';
@@ -54,10 +53,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late ScrollController _scrollController;
-  late Movie featureMovie;
   late Future<List<Movie>> originalMovies;
   late Future<List<Movie>> trendingMovies;
   late Future<List<Movie>> topRatedMovies;
+  late Future<DocumentSnapshot<Object?>> featureMovie;
 
   @override
   void initState() {
@@ -68,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     originalMovies = AllMoviesService.fetchOriginals();
     trendingMovies = AllMoviesService.fetchTrendings();
     topRatedMovies = AllMoviesService.fetchTopRated();
+    featureMovie = AllMoviesService.fetchFeatured();
     // AllMoviesService.fetchFeatured().then((result) {
     //   print(result);
     //   setState(() {
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: [
           SliverToBoxAdapter(
             child: FutureBuilder<DocumentSnapshot>(
-                future: AllMoviesService.fetchFeatured(),
+                future: featureMovie,
                 builder: (BuildContext context,
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasError) {
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: trendingMovies,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ContentList(
+                    return Trendings(
                       key: PageStorageKey('trendings'),
                       title: 'Trendings Now',
                       contentList: snapshot.data!,

@@ -12,7 +12,7 @@ class NavScreen extends StatefulWidget {
 class _NavScreenState extends State<NavScreen> {
   final List<Widget> _screens = [
     HomeScreen(key: PageStorageKey('homeScreen')),
-    Scaffold(),
+    MyFavourites(key: PageStorageKey('favouritesScreen')),
     Scaffold(),
     Scaffold(),
     MovieDetails(key: PageStorageKey('movieDetails')),
@@ -20,7 +20,7 @@ class _NavScreenState extends State<NavScreen> {
 
   final Map<String, IconData> _icons = const {
     'Home': Icons.home,
-    'Search': Icons.search,
+    'Favourites': Icons.favorite,
     'Coming Soon': Icons.queue_play_next,
     'Downloads': Icons.file_download,
     'More': Icons.menu,

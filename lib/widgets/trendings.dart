@@ -39,6 +39,10 @@ class Trendings extends StatelessWidget {
             itemCount: contentList.length,
             itemBuilder: (BuildContext context, int index) {
               final Movie content = contentList[index];
+              // String valueString = content.color!.split('(0x')[1].split(')')[0];
+              int value = int.parse(content.color!);
+              Color contentColor = new Color(value);
+
               return GestureDetector(
                 onTap: () => print(content.name),
                 child: Stack(
@@ -46,20 +50,20 @@ class Trendings extends StatelessWidget {
                   children: [
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 14.0),
-                      height: 100.0,
-                      width: 100.0,
+                      height: 120.0,
+                      width: 120.0,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(content.imageUrl!),
+                          image: NetworkImage(content.imageUrl!),
                           fit: BoxFit.cover,
                         ),
                         shape: BoxShape.circle,
-                        border: Border.all(color: content.color!, width: 3.0),
+                        border: Border.all(color: contentColor, width: 3.0),
                       ),
                     ),
                     Container(
-                      height: 100.0,
-                      width: 100.0,
+                      height: 120.0,
+                      width: 120.0,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
@@ -67,21 +71,41 @@ class Trendings extends StatelessWidget {
                             Colors.black54,
                             Colors.transparent,
                           ],
-                          stops: [0, 0.35, 1],
+                          stops: [0, 0.25, 1],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                         ),
                         shape: BoxShape.circle,
-                        border: Border.all(color: content.color!, width: 3.0),
+                        border: Border.all(color: contentColor, width: 3.0),
                       ),
                     ),
                     Positioned(
-                      left: 0,
-                      right: 0,
                       bottom: 0,
-                      child: SizedBox(
-                        height: 40.0,
-                        child: Image.asset(content.titleImageUrl!),
+                      width: 140.0,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: SizedBox(
+                            height: 30.0,
+                            child: Text(
+                              content.name!.toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                shadows: <Shadow>[
+                                  Shadow(
+                                    offset: Offset(0.0, 1.9),
+                                    blurRadius: 3.0,
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                  Shadow(
+                                    offset: Offset(0, 1.8),
+                                    blurRadius: 10.0,
+                                    color: contentColor,
+                                  ),
+                                ],
+                              ),
+                            )),
                       ),
                     ),
                   ],

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Movie {
+  final String? movieId;
   final String? name;
   final String? imageUrl;
-  final String? titleImageUrl;
   final String? videoUrl;
   final String? description;
-  final Color? color;
+  final String? color;
   final bool? trendings;
   final bool? originals;
   final bool? topRated;
 
   Movie({
+    this.movieId,
     this.name,
     this.imageUrl,
-    this.titleImageUrl,
     this.videoUrl,
     this.description,
     this.color,
@@ -36,23 +36,26 @@ class Movie {
 
   factory Movie.fromMap(Map<String, dynamic> json) {
     return Movie(
+      movieId: json['movieId'],
       name: json['name'],
       imageUrl: json['imageUrl'],
-      titleImageUrl: json['titleImageUrl'],
       videoUrl: json['videoUrl'],
-      description: json['videoUrl'],
-      color: json['videoUrl'],
+      description: json['description'],
+      color: json['color'],
+      trendings: json['trendings'],
+      originals: json['originals'],
+      topRated: json['topRated'],
     );
   }
 
   Movie.fromJson(Map<String, Object?> json)
       : this(
+          movieId: json['movieId']! as String,
           name: json['name']! as String,
           imageUrl: json['imageUrl']! as String,
-          titleImageUrl: json['titleImageUrl']! as String,
           videoUrl: json['videoUrl']! as String,
           description: json['description']! as String,
-          color: json['color']! as Color,
+          color: json['color']! as String,
           trendings: json['trendings']! as bool,
           originals: json['originals']! as bool,
           topRated: json['topRated']! as bool,
@@ -60,9 +63,9 @@ class Movie {
 
   Map<String, Object?> toJson() {
     return {
+      'movieId': movieId,
       'name': name,
       'imageUrl': imageUrl,
-      'titleImageUrl': titleImageUrl,
       'videoUrl': videoUrl,
       'description': description,
       'color': color,

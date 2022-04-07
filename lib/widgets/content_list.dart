@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:popcorn_mobile_app/models/models.dart';
+import 'package:popcorn_mobile_app/services/favourites.dart';
 
 import '../screens/screens.dart';
 
@@ -78,6 +79,9 @@ class ContentList extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final Movie content = contentList[index];
                   return GestureDetector(
+                    onLongPress: () {
+                      FavouriteService.addFavourtie(content);
+                    },
                     //onTap: () => print(content.name),
                     onTap: () => MovieDetails(),
                     child: Container(
