@@ -1,10 +1,29 @@
 import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:popcorn_mobile_app/cubits/app_bar/app_bar_cubit.dart';
 import 'dart:ui' as ui;
 import 'package:popcorn_mobile_app/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:popcorn_mobile_app/screens/screens.dart';
+import 'package:popcorn_mobile_app/widgets/custom_app_bar.dart';
+import 'package:popcorn_mobile_app/widgets/widgets.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MovieDetails extends StatelessWidget {
-  MovieDetails({Key? key}) : super(key: key);
+//FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+class Detail extends StatefulWidget {
+  final docId;
+  Detail(this.docId);
+
+  @override
+  State<StatefulWidget> createState() => MovieDetails(docId);
+}
+
+class MovieDetails extends State<Detail> {
+  final docId;
+  MovieDetails(this.docId);
   //final movie;
 
   var image_url =
@@ -14,10 +33,19 @@ class MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
     return new Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(screenSize.width, 50.0),
+        child: BlocBuilder<AppBarCubit, double>(
+          builder: (context, scrollOffset) {
+            return CustomAppBar2();
+          },
+        ),
+      ),
       body: new Stack(
         fit: StackFit.expand,
-        children: [
+        children: <Widget>[
           new Image.network(image_url, fit: BoxFit.cover),
           new BackdropFilter(
             filter: new ui.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
@@ -101,7 +129,7 @@ class MovieDetails extends StatelessWidget {
                               padding: const EdgeInsets.all(16.0),
                               alignment: Alignment.center,
                               child: new Icon(
-                                Icons.share,
+                                Icons.favorite_border_outlined,
                                 color: Colors.white,
                               ),
                               decoration: new BoxDecoration(
@@ -112,7 +140,7 @@ class MovieDetails extends StatelessWidget {
                     )
                   ],
                 )),
-          )
+          ),
         ],
       ),
     );
