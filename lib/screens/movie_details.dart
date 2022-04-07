@@ -35,14 +35,14 @@ class MovieDetails extends State<Detail> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return new Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(screenSize.width, 50.0),
-        child: BlocBuilder<AppBarCubit, double>(
-          builder: (context, scrollOffset) {
-            return CustomAppBar2();
-          },
-        ),
-      ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size(screenSize.width, 50.0),
+      //   child: BlocBuilder<AppBarCubit, double>(
+      //     builder: (context, scrollOffset) {
+      //       return CustomAppBar2();
+      //     },
+      //   ),
+      // ),
       body: new Stack(
         fit: StackFit.expand,
         children: <Widget>[
