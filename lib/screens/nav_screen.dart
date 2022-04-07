@@ -15,7 +15,7 @@ class _NavScreenState extends State<NavScreen> {
     MyFavourites(key: PageStorageKey('favouritesScreen')),
     Scaffold(),
     Scaffold(),
-    Scaffold(),
+    MovieDetails(key: PageStorageKey('movieDetails')),
   ];
 
   final Map<String, IconData> _icons = const {
