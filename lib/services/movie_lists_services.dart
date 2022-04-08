@@ -4,8 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AllMovieListsAPIs {
   static Future<List<MovieList>> fetchAllLists() async {
-    QuerySnapshot<Map<String, dynamic>> allMovieLists =
-        await FirebaseFirestore.instance.collection('movieLists').get();
+    QuerySnapshot<Map<String, dynamic>> allMovieLists = await FirebaseFirestore
+        .instance
+        .collection('movieLists')
+        .doc('guSlhb6Fvf0jiv2yIcaG')
+        .collection('ListNames')
+        .get();
 
     if (allMovieLists.docs.isEmpty) {
       throw Exception('Failed to load Lists');
@@ -20,16 +24,17 @@ class AllMovieListsAPIs {
     return snapshot.docs.map((e) => MovieList.fromMap(e.data())).toList();
   }
 
-  static Future<void> addMovieList(MovieList movieList) {
+  static Future<void> addMovieList(String name, String id) {
     CollectionReference favRef = FirebaseFirestore.instance
         .collection('movieLists')
-        .doc('fBqWcnKBZMIpFEVOGa4d')
-        .collection('movieLists');
+        .doc('guSlhb6Fvf0jiv2yIcaG')
+        .collection('ListNames');
 
     return favRef
-        .doc(movieList.id)
+        .doc(name)
         .set({
-          'name': movieList.name,
+          'name': name,
+          'id': id,
         })
         .then((value) => print("Movie List Added"))
         .catchError((error) => print("Failed to add movie List: $error"));
@@ -38,8 +43,8 @@ class AllMovieListsAPIs {
   static Future<void> deleteMovieList(String movieID) {
     CollectionReference favRef = FirebaseFirestore.instance
         .collection('movieLists')
-        .doc('fBqWcnKBZMIpFEVOGa4d')
-        .collection('movieLists');
+        .doc('guSlhb6Fvf0jiv2yIcaG')
+        .collection('ListNames');
 
     print(movieID);
 
