@@ -84,11 +84,19 @@ class ContentList extends StatelessWidget {
                     },
                     //onTap: () => print(content.name),
                     onTap: () {
-                      var docId = content.name;
+                      //var docId = content.name;
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Detail(docId)));
+                              //builder: (context) => Detail(docId)));
+                              builder: ((context) => Detail(
+                                    movieId: (content.movieId).toString(),
+                                    imageUrl: (content.imageUrl).toString(),
+                                    videoUrl: (content.videoUrl).toString(),
+                                    description:
+                                        (content.description).toString(),
+                                    name: (content.name).toString(),
+                                  ))));
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 10.0),

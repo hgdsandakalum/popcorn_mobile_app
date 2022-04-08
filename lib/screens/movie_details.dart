@@ -14,20 +14,44 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class Detail extends StatefulWidget {
-  final docId;
-  Detail(this.docId);
+  // String movieId = "";
+  // String imageUrl = "";
+  // String videoUrl = "";
+  // String description = "";
+  // String name = "";
+
+  // Detail(
+  //   String? movieId,
+  //   String? imageUrl,
+  //   String? videoUrl,
+  //   String? description,
+  //   String? name,
+  // );
+  Detail(
+      {this.movieId = "",
+      this.imageUrl = "",
+      this.videoUrl = "",
+      this.description = "",
+      this.name = ""});
+  final String movieId;
+  final String imageUrl;
+  final String videoUrl;
+  final String description;
+  final String name;
 
   @override
-  State<StatefulWidget> createState() => MovieDetails(docId);
+  State<StatefulWidget> createState() {
+    return new DetailState();
+  }
 }
 
-class MovieDetails extends State<Detail> {
-  final docId;
-  MovieDetails(this.docId);
+class DetailState extends State<Detail> {
+  //final docId;
+  //MovieDetails(this.movieId);
   //final movie;
 
-  var image_url =
-      'https://cdnb.artstation.com/p/assets/images/images/040/935/333/large/carpaa-2011-spiderman-nwh-6-006.jpg?1630315231';
+  // var image_url =
+  //     'https://cdnb.artstation.com/p/assets/images/images/040/935/333/large/carpaa-2011-spiderman-nwh-6-006.jpg?1630315231';
   //MovieDetails(this.movie);
   Color mainColor = const Color(0xff3C3261);
 
@@ -46,7 +70,7 @@ class MovieDetails extends State<Detail> {
       body: new Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          new Image.network(image_url, fit: BoxFit.cover),
+          new Image.network(widget.imageUrl, fit: BoxFit.cover),
           new BackdropFilter(
             filter: new ui.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: new Container(
@@ -67,7 +91,7 @@ class MovieDetails extends State<Detail> {
                       decoration: new BoxDecoration(
                           borderRadius: new BorderRadius.circular(10.0),
                           image: new DecorationImage(
-                              image: new NetworkImage(image_url),
+                              image: new NetworkImage(widget.imageUrl),
                               fit: BoxFit.cover),
                           boxShadow: [
                             new BoxShadow(
@@ -83,7 +107,7 @@ class MovieDetails extends State<Detail> {
                         children: <Widget>[
                           new Expanded(
                               child: new Text(
-                            'Spider Man - No Way Home',
+                            widget.name,
                             style: new TextStyle(
                                 color: Colors.white,
                                 fontSize: 30.0,
@@ -100,7 +124,7 @@ class MovieDetails extends State<Detail> {
                       ),
                     ),
                     new Text(
-                      'Over View of the Movie',
+                      widget.description,
                       style: new TextStyle(
                           color: Colors.white, fontFamily: 'Arvo'),
                     ),
