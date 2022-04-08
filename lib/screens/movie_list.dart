@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popcorn_mobile_app/cubits/cubits.dart';
+import 'package:popcorn_mobile_app/models/lists.dart';
 import 'package:popcorn_mobile_app/widgets/widgets.dart';
 import 'dart:ui' as ui;
+import 'package:popcorn_mobile_app/services/movie_lists_services.dart';
 
 class MovieListScreen extends StatefulWidget {
   const MovieListScreen({Key? key}) : super(key: key);
@@ -14,18 +16,21 @@ class MovieListScreen extends StatefulWidget {
 }
 
 class _MovieListScreenState extends State<MovieListScreen> {
-  // ignore: deprecated_member_use
-  late List<String> movieList = [];
-  String input = "";
+  //late List<String> movieList = [];
+  late Future<List<MovieList>> allMovieLists;
+
+  String name = "";
+  String id = "";
+
+  final nameEditingController = TextEditingController();
+  final idEditingController = TextEditingController();
+
   var image_url = 'https://images5.alphacoders.com/445/445155.jpg';
 
   @override
   void initState() {
+    allMovieLists = AllMovieListsAPIs.fetchAllLists();
     super.initState();
-    movieList.add("Action");
-    movieList.add("Adventure");
-    movieList.add("Comedy");
-    movieList.add("Thriller");
   }
 
   @override
@@ -47,17 +52,36 @@ class _MovieListScreenState extends State<MovieListScreen> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                      title: Text("Add MovieList"),
-                      content: TextField(
-                        onChanged: (String value) {
-                          input = value;
-                        },
+                      title: Text("Add Movie List"),
+                      content: Column(
+                        children: [
+                          TextField(
+                            controller: nameEditingController,
+                            decoration:
+                                InputDecoration(hintText: 'Enter List Name'),
+                            onChanged: (String value) {
+                              this.setState(() {
+                                name = value;
+                              });
+                            },
+                          ),
+                          TextField(
+                            controller: idEditingController,
+                            decoration:
+                                InputDecoration(hintText: 'Enter List Id'),
+                            onChanged: (String value) {
+                              this.setState(() {
+                                id = value;
+                              });
+                            },
+                          )
+                        ],
                       ),
                       actions: <Widget>[
                         FlatButton(
                           onPressed: () {
-                            setState(() {
-                              movieList.add(input);
+                            this.setState(() {
+                              AllMovieListsAPIs.addMovieList(name, id);
                             });
                           },
                           child: Text("Add"),
@@ -79,28 +103,50 @@ class _MovieListScreenState extends State<MovieListScreen> {
               color: Colors.black.withOpacity(0.5),
             ),
           ),
-          ListView.builder(
-              itemCount: movieList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                    key: Key(movieList[index]),
-                    child: Card(
-                        elevation: 4,
-                        margin: EdgeInsets.all(8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                        child: ListTile(
-                          title: Text(movieList[index]),
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              setState(() {
-                                movieList.removeAt(index);
-                              });
-                            },
-                          ),
-                        )));
-              })
+          Row(
+            children: [
+              Flexible(
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 25.0),
+                child: FutureBuilder<List<MovieList>>(
+                  future: allMovieLists,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<MovieList> contentList = snapshot.data!;
+                      return ListView.builder(
+                          itemCount: contentList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final MovieList content = contentList[index];
+                            return Dismissible(
+                                key: Key(content.id),
+                                child: Card(
+                                    elevation: 4,
+                                    margin: EdgeInsets.all(8),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    child: ListTile(
+                                      title: Text(content.name),
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          this.setState(() {
+                                            AllMovieListsAPIs.deleteMovieList(
+                                                content.name);
+                                          });
+                                        },
+                                      ),
+                                    )));
+                          });
+                    }
+                    return Container();
+                  },
+                ),
+              ))
+            ],
+          )
         ],
       ),
     );

@@ -14,19 +14,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class Detail extends StatefulWidget {
-  // String movieId = "";
-  // String imageUrl = "";
-  // String videoUrl = "";
-  // String description = "";
-  // String name = "";
-
-  // Detail(
-  //   String? movieId,
-  //   String? imageUrl,
-  //   String? videoUrl,
-  //   String? description,
-  //   String? name,
-  // );
   Detail(
       {this.movieId = "",
       this.imageUrl = "",
