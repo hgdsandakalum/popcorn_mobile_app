@@ -4,3 +4,4 @@ export 'favourites.dart';
 export 'movie_details.dart';
 export 'coming_soon.dart';
 export 'movie_list.dart';
+export 'feedbacks.dart';
