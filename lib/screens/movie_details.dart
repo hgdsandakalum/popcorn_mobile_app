@@ -110,10 +110,58 @@ class MovieDetails extends State<Detail> {
                         new Expanded(
                             child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => const Feedbacks()),
-                            );
+                            showModalBottomSheet<void>(
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: screenSize.width * 0.90,
+                                    height: screenSize.height * 0.90,
+                                    decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20),
+                                        )),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.0, vertical: 5.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          TextField(
+                                            obscureText: true,
+                                            decoration: InputDecoration(
+                                              enabledBorder:
+                                                  new OutlineInputBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        15.0),
+                                                borderSide: BorderSide(
+                                                    color: Colors.white54,
+                                                    width: 0.0),
+                                              ),
+                                              focusedBorder:
+                                                  new OutlineInputBorder(
+                                                borderRadius:
+                                                    new BorderRadius.circular(
+                                                        15.0),
+                                                borderSide: BorderSide(
+                                                    color: Colors.white),
+                                              ),
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Enter a Comment',
+                                              labelStyle: new TextStyle(
+                                                  color: Colors.white54),
+                                              hintText: 'Enter a Comment',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
                           },
                           child: new Container(
                             width: 150.0,
