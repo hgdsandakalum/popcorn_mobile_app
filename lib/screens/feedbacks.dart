@@ -3,17 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popcorn_mobile_app/services/services.dart';
 
 import '../cubits/app_bar/app_bar_cubit.dart';
-import '../models/models.dart';
 import '../widgets/widgets.dart';
 
-class Feedbacks extends StatefulWidget {
-  const Feedbacks({Key? key}) : super(key: key);
+class FeedbackScreen extends StatefulWidget {
+  const FeedbackScreen({Key? key}) : super(key: key);
 
   @override
-  _FeedbacksState createState() => _FeedbacksState();
+  _FeedbackScreenState createState() => _FeedbackScreenState();
 }
 
-class _FeedbacksState extends State<Feedbacks> {
+class _FeedbackScreenState extends State<FeedbackScreen> {
   @override
   void initState() {
     super.initState();
@@ -23,12 +22,14 @@ class _FeedbacksState extends State<Feedbacks> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 
+    print(screenSize.width.toString());
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(screenSize.width, 50.0),
         child: BlocBuilder<AppBarCubit, double>(
           builder: (context, scrollOffset) {
-            return CustomAppBar2();
+            return CustomAppBar();
           },
         ),
       ),
