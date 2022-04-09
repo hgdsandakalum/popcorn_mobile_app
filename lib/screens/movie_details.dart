@@ -119,20 +119,28 @@ class DetailState extends State<Detail> {
                     new Row(
                       children: <Widget>[
                         new Expanded(
-                            child: new Container(
-                          width: 150.0,
-                          height: 60.0,
-                          alignment: Alignment.center,
-                          child: new Text(
-                            'Rate Movie',
-                            style: new TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Arvo',
-                                fontSize: 20.0),
+                            child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => const Feedbacks()),
+                            );
+                          },
+                          child: new Container(
+                            width: 150.0,
+                            height: 60.0,
+                            alignment: Alignment.center,
+                            child: new Text(
+                              'Feedbacks',
+                              style: new TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Arvo',
+                                  fontSize: 20.0),
+                            ),
+                            decoration: new BoxDecoration(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                color: Color(0xaa3C3261)),
                           ),
-                          decoration: new BoxDecoration(
-                              borderRadius: new BorderRadius.circular(10.0),
-                              color: Color(0xaa3C3261)),
                         )),
                         new Padding(
                             padding: const EdgeInsets.all(16.0),
