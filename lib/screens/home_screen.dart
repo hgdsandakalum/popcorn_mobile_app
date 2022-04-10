@@ -56,7 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Movie>> originalMovies;
   late Future<List<Movie>> trendingMovies;
   late Future<List<Movie>> topRatedMovies;
+  late Future<List<Movie>> favouriteMovies;
   late Future<DocumentSnapshot<Object?>> featureMovie;
+
+  //authservice
+  final AuthService _auth = AuthService();
+  late user_model currentUser = user_model();
 
   @override
   void initState() {
@@ -64,16 +69,22 @@ class _HomeScreenState extends State<HomeScreen> {
       ..addListener(() {
         context.read<AppBarCubit>().setOffset(_scrollController.offset);
       });
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .get()
+        .then((val) {
+      setState(() {
+        currentUser = user_model.fromMap(val.data());
+      });
+    });
+
     originalMovies = AllMoviesService.fetchOriginals();
     trendingMovies = AllMoviesService.fetchTrendings();
     topRatedMovies = AllMoviesService.fetchTopRated();
     featureMovie = AllMoviesService.fetchFeatured();
-    // AllMoviesService.fetchFeatured().then((result) {
-    //   print(result);
-    //   setState(() {
-    //     featureMovie = result;
-    //   });
-    // });
+    favouriteMovies = FavouriteService.fetchFavourites();
 
     super.initState();
   }
@@ -87,6 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+
+    print(currentUser.f_name);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -175,13 +188,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SliverToBoxAdapter(
             child: FutureBuilder<List<Movie>>(
-              future: trendingMovies,
+              future: favouriteMovies,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ContentList(
                     key: PageStorageKey('myFavourites'),
                     title: 'My Favourites',
                     contentList: snapshot.data!,
+                    currentUser: currentUser,
                   );
                 } else if (snapshot.hasError) {
                   return Text(
@@ -218,6 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     key: PageStorageKey('originals'),
                     title: 'Popcorn Originals',
                     contentList: snapshot.data!,
+                    currentUser: currentUser,
                   );
                 } else if (snapshot.hasError) {
                   return Text(
@@ -256,6 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       key: PageStorageKey('topRated'),
                       title: 'Top Rated',
                       contentList: snapshot.data!,
+                      currentUser: currentUser,
                     );
                   } else if (snapshot.hasError) {
                     return Text(

@@ -141,7 +141,7 @@ class DetailState extends State<Detail> {
                                     width: screenSize.width * 0.90,
                                     height: screenSize.height * 0.90,
                                     decoration: BoxDecoration(
-                                        color: Colors.black,
+                                        color: Color.fromARGB(235, 0, 0, 0),
                                         borderRadius: BorderRadius.vertical(
                                           top: Radius.circular(20),
                                         )),
@@ -213,6 +213,7 @@ class DetailState extends State<Detail> {
                                                           formattedDate,
                                                           formattedTime,
                                                           commentMessage);
+                                                  Navigator.pop(context);
                                                 });
                                               },
                                               child: Text(
@@ -285,6 +286,64 @@ class DetailState extends State<Detail> {
                                                                   onTap: () => {
                                                                     print(comment
                                                                         .userName)
+                                                                  },
+                                                                  onLongPress:
+                                                                      () {
+                                                                    var baseDialog =
+                                                                        BaseAlertDialog2(removeOnPressed:
+                                                                            () {
+                                                                      CommentService.deleteComment(
+                                                                          comment
+                                                                              .movieId,
+                                                                          comment
+                                                                              .message);
+                                                                      final snackBar =
+                                                                          SnackBar(
+                                                                        content:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            const Text(
+                                                                              'Comment has been removed.',
+                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                            Icon(
+                                                                              Icons.done_all_rounded,
+                                                                              color: Colors.black,
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                        backgroundColor:
+                                                                            Colors.redAccent,
+                                                                        behavior:
+                                                                            SnackBarBehavior.floating,
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10.0),
+                                                                        ),
+                                                                      );
+
+                                                                      // Find the ScaffoldMessenger in the widget tree
+                                                                      // and use it to show a SnackBar.
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(
+                                                                              snackBar);
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    }, editOnPressed:
+                                                                            () {
+                                                                      print(
+                                                                          "Edit");
+                                                                    });
+                                                                    showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext context) =>
+                                                                                baseDialog);
                                                                   },
                                                                   child:
                                                                       Container(

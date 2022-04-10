@@ -23,7 +23,7 @@ class _NavScreenState extends State<NavScreen> {
     'Favourites': Icons.favorite,
     'Upcoming': Icons.queue_play_next,
     'Downloads': Icons.file_download,
-    'More': Icons.menu,
+    'My Lists': Icons.menu,
   };
 
   int _currentIndex = 0;

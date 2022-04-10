@@ -33,8 +33,16 @@ dependencies:
   cloud_firestore: ^3.1.10
   flutter_slidable: ^1.2.0
   intl: ^0.17.0
+  firebase_auth: ^3.3.13
+  firebase_storage: ^10.2.11
+  file_picker: ^4.5.1
+  flutter_datetime_picker: ^1.5.1
+  fluttertoast: 8.0.2
+  font_awesome_flutter: ^10.1.0
+  path: ^1.8.0
 
 dev_dependencies:
+  flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
 

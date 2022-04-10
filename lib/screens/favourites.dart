@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popcorn_mobile_app/services/services.dart';
 
@@ -78,10 +79,38 @@ class _MyFavouritesState extends State<MyFavourites> {
                                     content:
                                         "Do you really want to remove this movie from your favourites?",
                                     yesOnPressed: () {
-                                      setState(() {
-                                        FavouriteService.deleteFavourtie(
-                                            content.movieId!);
-                                      });
+                                      FavouriteService.deleteFavourtie(
+                                          content.movieId!);
+                                      final snackBar = SnackBar(
+                                        content: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Removed from your favourites.',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Icon(
+                                              Icons.done_all_rounded,
+                                              color: Colors.black,
+                                            )
+                                          ],
+                                        ),
+                                        backgroundColor: Colors.redAccent,
+                                        behavior: SnackBarBehavior.floating,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                      );
+
+                                      // Find the ScaffoldMessenger in the widget tree
+                                      // and use it to show a SnackBar.
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      Navigator.pop(context);
                                     },
                                     noOnPressed: () {
                                       Navigator.pop(context);

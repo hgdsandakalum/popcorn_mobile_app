@@ -43,4 +43,26 @@ class CommentService {
         .then((value) => print("Comment Added"))
         .catchError((error) => print("Failed to add comment: $error"));
   }
+
+  static Future<void> deleteComment(String movieId, String comment) async {
+    CollectionReference commentRef =
+        FirebaseFirestore.instance.collection('movieComments');
+
+    QuerySnapshot querySnap = await FirebaseFirestore.instance
+        .collection('movieComments')
+        .where('movieId', isEqualTo: movieId)
+        .where('message', isEqualTo: comment)
+        .get();
+    print(querySnap.docs);
+    QueryDocumentSnapshot doc = querySnap.docs[0];
+    String docRef = doc.reference.id;
+
+    print(docRef);
+
+    return commentRef
+        .doc(docRef)
+        .delete()
+        .then((value) => print("Comment Deleted"))
+        .catchError((error) => print("Failed to delete Comment: $error"));
+  }
 }
