@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:popcorn_mobile_app/assets.dart';
 
 import '../screens/screens.dart';
+import '../screens/userProfile.dart';
 
 class CustomAppBar extends StatelessWidget {
   final double scrollOffset;
@@ -31,8 +32,13 @@ class CustomAppBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _MainAppBarButton(
-                    title: 'Movies',
-                    onTap: () => print('Movies'),
+                    title: 'Profile',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()),
+                      );
+                    },
                   ),
                   _MainAppBarButton(
                     title: 'My Favourites',

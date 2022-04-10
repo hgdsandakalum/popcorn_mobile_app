@@ -5,3 +5,6 @@ export 'movie_details.dart';
 export 'coming_soon.dart';
 export 'movie_list.dart';
 export 'feedbacks.dart';
+export 'signup_screen.dart';
+export 'login_screen.dart';
+export 'edit_profile.dart';

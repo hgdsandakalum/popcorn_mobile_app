@@ -61,4 +61,19 @@ class FavouriteService {
         .then((value) => print("Movie Deleted"))
         .catchError((error) => print("Failed to delete Movie: $error"));
   }
+
+  static Future<bool> checkIfDocExists(String? docId) async {
+    try {
+      // Get reference to Firestore collection
+      var collectionRef = FirebaseFirestore.instance
+          .collection('favouriteMovies')
+          .doc('fBqWcnKBZMIpFEVOGa4d')
+          .collection('userFavourites');
+
+      var doc = await collectionRef.doc(docId).get();
+      return doc.exists;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

@@ -7,12 +7,14 @@ import '../screens/screens.dart';
 
 class ContentList extends StatelessWidget {
   final String title;
+  final user_model currentUser;
   final List<Movie> contentList;
 
   const ContentList({
     Key? key,
     required this.title,
     required this.contentList,
+    required this.currentUser,
   }) : super(key: key);
 
   @override
@@ -81,6 +83,33 @@ class ContentList extends StatelessWidget {
                   return GestureDetector(
                     onLongPress: () {
                       FavouriteService.addFavourtie(content);
+
+                      final snackBar = SnackBar(
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Added to the favourite.',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Icon(
+                              Icons.done_all_rounded,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                        backgroundColor: Colors.amberAccent,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      );
+
+                      // Find the ScaffoldMessenger in the widget tree
+                      // and use it to show a SnackBar.
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     },
                     //onTap: () => print(content.name),
                     onTap: () {

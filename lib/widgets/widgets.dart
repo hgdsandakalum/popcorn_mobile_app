@@ -5,3 +5,7 @@ export 'vertical_icon_button.dart';
 export 'trendings.dart';
 export 'content_list.dart';
 export 'base_alert.dart';
+export 'base_alert_2.dart';
+export 'button_widget.dart';
+export 'profile_widget.dart';
+export 'textfield_widget.dart';
