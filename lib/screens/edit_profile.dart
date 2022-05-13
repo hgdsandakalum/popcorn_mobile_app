@@ -78,7 +78,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       fillColor: Color.fromARGB(32, 255, 255, 255),
                       filled: true),
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 11.0),
                 TextField(
                   controller: l_name_editing_cntrlr,
                   style: TextStyle(color: Colors.white),
@@ -88,7 +88,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       fillColor: Color.fromARGB(32, 255, 255, 255),
                       filled: true),
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 11.0),
                 TextField(
                   controller: email_editing_cntrlr,
                   style: TextStyle(color: Colors.white),
@@ -99,7 +99,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       filled: true),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 23,
                 ),
                 ElevatedButton(
                   child: const Text('Update'),
